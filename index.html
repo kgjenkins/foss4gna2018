@@ -214,7 +214,7 @@ state of OSM-related plugins for QGIS 2 and QGIS 3.
 
 <div><b>Getting OSM data</b></div>
 
-<div><a href="https://www.openstreetmap.org/export#map=14/38.6257/-90.1984">Export .osm from OpenStreetMap.org</a></div>
+<div><a href="https://www.openstreetmap.org/#map=14/38.6257/-90.1984">Export .osm from OpenStreetMap.org</a></div>
 <div> <img src="image/openstreetmap-export.png"></div>
 <div> <img src="image/openstreetmap-export-bbox.png"></div>
 <div> <img src="image/openstreetmap-export-other.png"></div>
@@ -240,8 +240,10 @@ state of OSM-related plugins for QGIS 2 and QGIS 3.
   "D:/test/output.sqlite" "D:/test/input.osm"
 </pre></div>
 
+<div>ogr2ogr will create separate layers for points, lines, polygons</div>
+
 <div>ogr2ogr splits several common tags into separate columns</div>
-<div>Attribute Table "other_tags"<br><img src="image/qgis-osm-attribute-table.png" /></div>
+<div> <img src="image/qgis-osm-attribute-table.png" /></div>
 
 <div>POLYGONS<br>
 name, type, aeroway, amenity, admin_level, barrier, boundary, building,
@@ -257,23 +259,24 @@ name, barrier, highway, ref, address, is_in, place, man_made
 
 <div>Columns can be customized by editing GDAL's osmconf.ini file</div>
 
-
+<!--
 <div>limit by bounding box<pre>
   ogr2ogr -f "GPKG"
   -spat -90.1916 38.6254 -90.1903 38.6269
   "D:/test/output.gpkg" "D:/test/input.osm"
   </pre></div>
 
-<div>but BEWARE!<br><span class="small">some polygons may lose nodes outside the bbox, and containing polygons (like state or country boundaries) may not be included at all</span></div>
-
-
-
+  <div>but BEWARE!<br><span class="small">some polygons may lose nodes outside the bbox, and containing polygons (like state or country boundaries) may not be included at all</span></div>-->
 
 <div>If this sounds complicated,<br><b>don't worry!</b><br><br>QGIS Plugins make everything easier.</div>
+
+
+
 
 <div><b>QGIS Plugins</b> QuickMapServices QuickOSM OSMDownloader</div>
 
 <div><b>QuickMapServices</b> plugin</div>
+<div>Provides remotely-hosted basemaps from various providers</div>
 <div>Settings > More Services > Get contributed pack<br><img src="image/quickmapservices-get-contributed-pack.png" /></div>
 <div>OpenStreetMap Standard<br><img src="image/quickmapservices-osm-standard.png" /></div>
 <div>Mapbox Gray<br><img src="image/quickmapservices-mapbox-gray.png" /></div>
@@ -344,7 +347,7 @@ name, barrier, highway, ref, address, is_in, place, man_made
 
 <div><a href="https://2018.foss4g-na.org/session/how-not-use-osm2pgsql">How Not to Use osm2pgsql</a><br>Mary Carome<br>Tuesday, 11:15am</div>
 
-<div><a href="https://2018.foss4g-na.org/session/running-your-own-vector-tiles-stack">Running your own Vector Tiles Stack</a><br>Jeffrey Johnson, Gretchen Peterson, Jivan Amara, Alexander Rolek<br>Thursday workshop 2-5pm<br><span class="small">("will go over the process of loading data from OSM pbf files into PostGIS using imposm3")</span></div>
+<div><a href="https://2018.foss4g-na.org/session/running-your-own-vector-tiles-stack">Running your own Vector Tiles Stack</a><br>Thursday workshop 2-5pm<br><span class="small">"will go over the process of loading data from OSM pbf files into PostGIS using imposm3"</span></div>
 
 
 <div>Comments or questions?<br>kgj2@cornell.edu<br>@kgjenkins</div>
