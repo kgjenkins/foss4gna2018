@@ -1,0 +1,354 @@
+<!DOCTYPE html><html><head><title></title><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"><style type='text/css'>
+body {
+    font-family: 'Gentium Basic', 'Helvetica', 'Arial';
+    background:#000;
+    background-size:100%;
+    background-repeat:no-repeat;
+    color:#fff;
+    margin:0;
+    padding:0;
+    font-weight:bold;
+}
+
+h1, h2, h3, p {
+    margin:0;
+}
+
+em, b {
+    font-style:normal;
+    color:#0c0;
+    font-size:125%;
+}
+
+a {
+    color:#34d0e7;
+    text-decoration:none;
+}
+a:hover {
+    text-shadow:
+        0 0 32px #34d0e7;
+}
+
+img {
+    width:100%;
+}
+
+div {
+    cursor:pointer;
+    cursor:hand;
+    position:absolute;
+    top:0px;
+    left:0px;
+    padding:75px;
+    line-height:120%;
+    text-align:center;
+}
+
+div.left, ul {
+    text-align:left;
+}
+
+.small {
+    font-size:60%;
+}
+
+div.imageText {
+    text-shadow:0px 0px 20px #000;
+}
+</style><script type='text/javascript'>
+window.onload = function() {
+    var s = document.getElementsByTagName('div'), cur = 0, ti;
+    if (!s) return;
+
+    linkExternal();
+
+    function linkExternal() {
+        var a = document.getElementsByTagName('a');
+        for (var i = 0; i < a.length; i++) {
+            a[i].target = '_blank';
+        }
+    }
+
+    function go(n) {
+        cur = n;
+        var i = 1e3, e = s[n], t;
+        for (var k = 0; k < s.length; k++) s[k].style.display = 'none';
+        e.style.display = 'inline';
+        e.style.fontSize = i + 'px';
+        if (e.firstChild.nodeName === 'IMG') {
+            document.body.style.backgroundImage = 'url(' + e.firstChild.src + ')';
+            e.firstChild.style.display = 'none';
+            if ('classList' in e) e.classList.add('imageText');
+        } else {
+            document.body.style.backgroundImage = '';
+            document.body.style.backgroundColor = e.style.backgroundColor;
+        }
+        if (ti !== undefined) window.clearInterval(ti);
+        t = parseInt(e.getAttribute('time-to-next') || 0, 10);
+        if (t > 0) ti = window.setTimeout(fwd, (t * 1000));
+        while (
+            e.offsetWidth > window.innerWidth ||
+            e.offsetHeight > window.innerHeight) {
+            e.style.fontSize = (i -= 2) + 'px';
+            if (i < 0) break;
+        }
+        e.style.marginTop = ((window.innerHeight - e.offsetHeight) / 2) + 'px';
+        if (window.location.hash !== n) window.location.hash = n;
+        document.title = e.textContent || e.innerText;
+    }
+    document.onclick = function(e) {
+        if (e.shiftKey || e.altKey || e.shiftKey || e.button>0 || e.target.nodeName==='A') return;
+        go(++cur % (s.length));
+
+    };
+    function fwd() { go(Math.min(s.length - 1, ++cur)); }
+    function rev() { go(Math.max(0, --cur)); }
+    document.onkeydown = function(e) {
+        if (e.which === 39) fwd();
+        if (e.which === 37) rev();
+        if (e.which === 36) go(0); // home
+        if (e.which === 35) go(s.length-1); // end
+    };
+    document.ontouchstart = function(e) {
+        var x0 = e.changedTouches[0].pageX;
+        document.ontouchend = function(e) {
+            var x1 = e.changedTouches[0].pageX;
+            if (x1 - x0 < 0) fwd();
+            if (x1 - x0 > 0) rev();
+        };
+    };
+    function parse_hash() {
+        return Math.max(Math.min(
+            s.length - 1,
+            parseInt(window.location.hash.substring(1), 10)), 0);
+    }
+    if (window.location.hash) cur = parse_hash() || cur;
+    window.onhashchange = function() {
+        var c = parse_hash();
+        if (c !== cur) go(c);
+    };
+
+    go(cur);
+};
+</script></head><body>
+
+<!--
+
+https://2018.foss4g-na.org/session/using-openstreetmap-data-qgis
+
+Using OpenStreetMap data in QGIS
+
+Over the years, OpenStreetMap (OSM) has established itself as the most
+complete global dataset of road data, as well as a great source for other
+features like building outlines and points of interest. Its open data license
+has allowed third-party developers to create numerous tools for extracting,
+processing, and repackaging OSM data in a variety of formats. But with so
+many options, it can be difficult to keep up as new tools are created, and
+others are retired.
+
+This talk will give an overview of the many different ways to acquire and use
+OSM data within QGIS. We'll explore different sources and formats of OSM data
+extracts, and why you might choose one over another. We'll investigate the
+mystery of what happens to all those OSM tags during the conversion process.
+We'll discover some ready-made QGIS styles that can be used to render
+beautiful OSM data. We'll see various designs of pre-rendered OSM-based map
+tiles that can be used as base layers in QGIS. And we'll assess the current
+state of OSM-related plugins for QGIS 2 and QGIS 3.
+
+-->
+
+<div>Using OpenStreetMap data in QGIS<br><b class="small">Keith Jenkins</b></div>
+<div><b>Keith Jenkins</b><br>GIS&nbsp;Librarian<br>Cornell&nbsp;University</div>
+
+<div>This talk was inspired by Metro Extracts</div>
+<div>R.I.P.<br>Mapzen<br>(2013-2018)</div>
+
+<div>"Using OpenStreetMap data"</div>
+<div>visualizing or analyzing<br>(not editing)</div>
+
+<div><b>Why OSM?</b></div>
+<div>Open data</div>
+<div>many sites and tools for getting OSM extracts</div>
+
+<div>Most complete street map of the world</div>
+
+<div class="left"><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5552279/">Barrington-Leigh C, Millard-Ball A. (2017)<br>The world’s user-generated road map is more than 80% complete.</a></div>
+
+<div> <img src="image/barrington-leigh-1.png" /></div>
+<div> <img src="image/barrington-leigh-2.png" /></div>
+
+
+<div>Also, OpenStreetMap is more than just streets...</div>
+
+<div>building outlines, waterways, railroads, trails, placenames, schools, banks, churches, mosques, temples, libraries, museums, hospitals, fire stations, forests, cemeteries, gardens, shops, offices, swimming pools, playgrounds, tennis courts, sports fields, and much more</div>
+
+
+<div><b>OSM License and Copyright</b></div>
+<div>OSM requires attribution, and <a href="https://www.openstreetmap.org/copyright">linking to the copyright page</a>.</div>
+<div><a href="https://wiki.osmfoundation.org/wiki/Licence/Community_Guidelines">OSM Community Guidelines</a></div>
+
+
+
+
+<div><b>The Elements of OSM</b></div>
+<div>nodes, ways, tags, relations</div>
+<div>Nodes (points)</div>
+<div>Ways (lines,&nbsp;polygons)</div>
+<div>Tags (attributes)</div>
+<div class='left'>building=yes<br>building=house<br>building=commercial</div>
+<div class='left'>highway=primary<br>highway=residential<br>highway=footway</div>
+<div>OSM wiki has a <a href="https://wiki.openstreetmap.org/wiki/Map_Features#Building">guide to OSM tags</a></div>
+<div><a href="https://taginfo.openstreetmap.org/keys/building#values">TagInfo</a> provides tag usage statistics</div>
+<div>Relations</div>
+
+
+<div><b>Data Formats</b></div>
+<div>.osm<br>OSM&nbsp;XML</div>
+<div><img src="image/osm-xml.png" /></div>
+<div>.pbf<br>Protocolbuffer Binary Format</div>
+
+
+<div><b>Conversion tools</b><br>ogr2ogr osm2pgsql imposm osmosis osmium etc.</div>
+
+
+
+<div><b>Getting OSM data</b></div>
+
+<div><a href="https://www.openstreetmap.org/export#map=14/38.6257/-90.1984">Export .osm from OpenStreetMap.org</a></div>
+<div> <img src="image/openstreetmap-export.png"></div>
+<div> <img src="image/openstreetmap-export-bbox.png"></div>
+<div> <img src="image/openstreetmap-export-other.png"></div>
+
+
+
+
+<div><b>Adding OSM data to QGIS</b></div>
+
+
+<div>Add directly from .osm and .pbf file<br><img src="image/qgis-import-osm.png" /></div>
+
+<div>some rendering and stability issues when accessing .osm/.pbf directly</div>
+
+<div>convert to .gpkg or .sqlite (or .shp)</div>
+
+<div><pre>
+  ogr2ogr -f "GPKG" "D:/test/output.gpkg"
+  "D:/test/input.osm"
+
+
+  ogr2ogr -f "SQLite" -dsco SPATIALITE=YES
+  "D:/test/output.sqlite" "D:/test/input.osm"
+</pre></div>
+
+<div>ogr2ogr splits several common tags into separate columns</div>
+<div>Attribute Table "other_tags"<br><img src="image/qgis-osm-attribute-table.png" /></div>
+
+<div>POLYGONS<br>
+name, type, aeroway, amenity, admin_level, barrier, boundary, building,
+craft, geological, historic, land_area, landuse, leisure, man_made,
+military, natural, office, place, shop, sport, tourism<br>
+<br>
+LINES<br>
+name, highway, waterway, aerialway, barrier, man_made<br>
+<br>
+POINTS<br>
+name, barrier, highway, ref, address, is_in, place, man_made
+</div>
+
+<div>Columns can be customized by editing GDAL's osmconf.ini file</div>
+
+
+<div>limit by bounding box<pre>
+  ogr2ogr -f "GPKG"
+  -spat -90.1916 38.6254 -90.1903 38.6269
+  "D:/test/output.gpkg" "D:/test/input.osm"
+  </pre></div>
+
+<div>but BEWARE!<br><span class="small">some polygons may lose nodes outside the bbox, and containing polygons (like state or country boundaries) may not be included at all</span></div>
+
+
+
+
+<div>If this sounds complicated,<br><b>don't worry!</b><br><br>QGIS Plugins make everything easier.</div>
+
+<div><b>QGIS Plugins</b> QuickMapServices QuickOSM OSMDownloader</div>
+
+<div><b>QuickMapServices</b> plugin</div>
+<div>Settings > More Services > Get contributed pack<br><img src="image/quickmapservices-get-contributed-pack.png" /></div>
+<div>OpenStreetMap Standard<br><img src="image/quickmapservices-osm-standard.png" /></div>
+<div>Mapbox Gray<br><img src="image/quickmapservices-mapbox-gray.png" /></div>
+<div>Stamen Toner<br><img src="image/quickmapservices-stamen-toner.png" /></div>
+<div>Stamen Watercolor<br><img src="image/quickmapservices-stamen-watercolor.png" /></div>
+
+
+<div><b>QuickOSM</b> plugin</div>
+<div>Import OSM features for a specific area</div>
+<div>(uses Overpass API behind the scenes)</div>
+<div>Search for specific tags</div>
+<div>Can also import from .osm or .pbf file</div>
+<div> <img src="image/quickosm-building.png" /></div>
+<div> <img src="image/quickosm-file.png" /></div>
+
+
+<div><b>OSMDownloader</b> plugin</div>
+<div>Download <b>all OSM features</b> within a bbox</div>
+<div> <img src="image/osmdownloader.png" /></div>
+
+
+<div><b>OSMInfo</b><br>plugin<br>(QGIS 2.x only)</div>
+<div>Click map to fetch OSM feature info</div>
+
+
+<div><a href="https://wiki.openstreetmap.org/wiki/QGIS#Styles_for_OSM_data_in_QGIS">QGIS Styles for OSM data</a></div>
+<div>Various QML files can get you starting defining styles based on the OSM tags</div>
+
+
+
+
+<div><b>Websites offering OSM extracts</b></div>
+
+<div><a href="https://download.geofabrik.de/">Geofabrik</a></div>
+<div>download by country/state</div>
+<div>.osm .pbf .shp</div>
+<div>updated daily</div>
+<div>separate layers for buildings, landuse, natural, places, roads, railways, water areas, waterways, etc.</div>
+<!--<div><a href="http://download.geofabrik.de/osm-data-in-gis-formats-free.pdf">docs</a></div>-->
+
+
+
+<div><a href="https://export.hotosm.org/en/v3/">HOT Export Tool</a></div>
+<div>v3 April 2017</div>
+<div> <img src="image/hot-export-1.png"></div>
+<div> <img src="image/hot-export-2.png"></div>
+<div> <img src="image/hot-export-3.png"></div>
+<div> <img src="image/hot-export-education.png"></div>
+<div> <img src="image/hot-export-healthcare.png"></div>
+<div> <img src="image/hot-export-4.png"></div>
+<div> <img src="image/hot-export-done.png"></div>
+<div>HOT Exports are split into point, line, polygon layers</div>
+<div>Best to select just one "theme" at a time</div>
+
+
+<div>The OSM wiki<br><a href="https://wiki.openstreetmap.org/wiki/Planet.osm#Country_and_area_extracts">lists other extract sources</a></div>
+
+
+<div><a href="https://www.nextzen.org/metro-extracts/index.html">Metro Extracts</a></div>
+<div>Nextzen has snapshots from Jan&nbsp;29,&nbsp;2018</a></div>
+<div> <img src="image/nextzen-metro-extracts-2.png" /></div>
+<div> <img src="image/nextzen-metro-extracts-1.png" /></div>
+<div><b>imposm</b> splits features into thematic groups like amenities, buildings, roads, etc.</div>
+<div><b>osm2pgsql</b> splits features into point, line, polygon layers</div>
+
+
+<div>If you are interested in OSM + PostGIS...</div>
+
+<div><a href="https://2018.foss4g-na.org/session/how-not-use-osm2pgsql">How Not to Use osm2pgsql</a><br>Mary Carome<br>Tuesday, 11:15am</div>
+
+<div><a href="https://2018.foss4g-na.org/session/running-your-own-vector-tiles-stack">Running your own Vector Tiles Stack</a><br>Jeffrey Johnson, Gretchen Peterson, Jivan Amara, Alexander Rolek<br>Thursday workshop 2-5pm<br><span class="small">("will go over the process of loading data from OSM pbf files into PostGIS using imposm3")</span></div>
+
+
+<div>Comments or questions?<br>kgj2@cornell.edu<br>@kgjenkins</div>
+<div><img src="image/foss4gna-evaluate.png"></div>
+
+</body>
+</html>
