@@ -41,10 +41,8 @@ Links from the presentation:
 
 * [Other OSM extract resources](https://wiki.openstreetmap.org/wiki/Planet.osm#Country_and_area_extracts)
 
-* [Nextzen Metro Extracts](https://www.nextzen.org/metro-extracts/index.html)
-
 UPDATE:
 
 * [OSM Extracts by Interline](https://www.interline.io/osm/extracts/)
 
-
+* [Nextzen Metro Extracts](https://metro-extracts.nextzen.org/) have been updated as of 2018-05-22.  (Thanks, Ian Dees!)
