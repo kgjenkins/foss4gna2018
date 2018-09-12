@@ -2,7 +2,7 @@
 
 Presentation by Keith Jenkins at [FOSS4GNA 2018 St. Louis](https://2018.foss4g-na.org/session/using-openstreetmap-data-qgis)
 
-**SLIDES: https://kgjenkins.github.io/foss4gna2018 **
+**SLIDES:** https://kgjenkins.github.io/foss4gna2018
 
 Over the years, OpenStreetMap (OSM) has established itself as the most
 complete global dataset of road data, as well as a great source for other
