@@ -35,7 +35,7 @@ Links from the presentation:
 
 * [QGIS Styles for OSM data](https://wiki.openstreetmap.org/wiki/QGIS#Styles_for_OSM_data_in_QGIS)
 
-* [Geofabrik OSM douwnloads](https://download.geofabrik.de/)
+* [Geofabrik OSM downloads](https://download.geofabrik.de/)
 
 * [HOT Export Tool](https://export.hotosm.org/en/v3/)
 
